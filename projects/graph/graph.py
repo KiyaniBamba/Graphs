@@ -29,21 +29,56 @@ class Graph:
         """
         Get all neighbors (edges) of a vertex.
         """
-        pass  # TODO
+        return self.vertices[vertex_id]
 
     def bft(self, starting_vertex):
         """
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
+        # create a queue
+        qq = Queue()
+        # create list of visited nodes
+        visited = set()
+        # put starting node is the queue
+        qq.enqueue(starting_vertex)
+        # while queue not empty
+        while qq.size() > 0:
+        # pop first node out of queue
+            vertex = qq.dequeue()
+        # if not visited
+            if vertex not in visited:
+                visited.add(vertex)
+                print(vertex)
+        # Mark as visited
+        # Get adjacent edges and add to list
+                for next_vert in self.vertices[vertex]:
+                    qq.enqueue(next_vert)
+        # Go to top of loop
         
+
 
     def dft(self, starting_vertex):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        # create a stack
+        st = Stack()
+        # create list of visited nodes
+        visited = set()
+        # put starting node is the stack
+        st.push(starting_vertex)
+        # while queue not empty
+        while st.size() > 0:
+        # pop first node out of stack
+            vertex = st.pop()
+        # if not visited
+            if vertex not in visited:
+                visited.add(vertex)
+                print(vertex) 
+                for next_vert in self.vertices[vertex]:
+                    st.push(next_vert) 
 
     def dft_recursive(self, starting_vertex):
         """
@@ -122,6 +157,7 @@ if __name__ == '__main__':
         1, 2, 4, 3, 7, 6, 5
         1, 2, 4, 3, 7, 5, 6
     '''
+    print('starting BFT')
     graph.bft(1)
 
     '''
@@ -131,6 +167,7 @@ if __name__ == '__main__':
         1, 2, 4, 7, 6, 3, 5
         1, 2, 4, 6, 3, 5, 7
     '''
+    print('starting DFT')
     graph.dft(1)
     graph.dft_recursive(1)
 
