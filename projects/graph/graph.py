@@ -67,7 +67,7 @@ class Graph:
         st = Stack()
         # create list of visited nodes
         visited = set()
-        # put starting node is the stack
+        # put starting node in the stack
         st.push(starting_vertex)
         # while queue not empty
         while st.size() > 0:
@@ -87,7 +87,23 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        # create a stack
+        st = Stack()
+        # create list of visited nodes
+        visited = set()
+        # put starting node in the stack
+        st.push(starting_vertex)
+        # while queue not empty
+        while st.size() > 0:
+        # pop first node out of stack
+            vertex = st.pop()
+        # if not visited
+            if vertex not in visited:
+                visited.add(vertex)
+                print(vertex) 
+                for starting_vertex in self.vertices[vertex]:
+                    self.dfs_recursive(starting_vertex)
+            
 
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -95,15 +111,57 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        # create a queue to hold the vertex ids
+        q = Queue()
+        # enqueue the start vertex id
+        q.enqueue(starting_vertex)
+        # create an empty visited set
+        visited = set()
+        # while the queue is not empty
+        while q.size() > 0:
+            # set vert to the dequeued element
+            vert = q.dequeue()
+            # if the vert is not in visited
+            if vert not in visited:
+                # if vert is target value
+                if vert == destination_vertex:
+                    # return True
+                    return True
+                # add the vert to visited set
+                visited.add(vert)
+                # loop over next vert in the vertices at the index of vert
+                for next_vert in self.vertices[vert]:
+                    # enqueue the next vert
+                    q.enqueue(next_vert)
+        # return False
+        return False
 
-    def dfs(self, starting_vertex, destination_vertex):
+    def dfs(self, starting_vertex, destination_vertex, visited=None):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        # if visited is None
+        if visited is None:
+            # create a new set of visited
+            visited = set()
+        # add start vert to visited
+        visited.add(starting_vertex)
+        # if the start vert is equal to the target value
+        if starting_vertex == destination_vertex:
+            # return True
+            return True
+        # loop over every child vertex in vertices set at the start vertex
+        for child_vert in self.vertices[starting_vertex]:
+            # if child vert is not in visited
+            if child_vert not in visited:
+                # if the recursive call to dfs
+                if self.dfs(child_vert, destination_vertex, visited):
+                    # return True
+                    return True
+        # Return False
+        return False
 
     def dfs_recursive(self, starting_vertex):
         """
@@ -112,8 +170,29 @@ class Graph:
         depth-first order.
 
         This should be done using recursion.
-        """
-        pass  # TODO
+        # """
+        # if visited is None
+        if visited is None:
+            # create a new set of visited
+            visited = set()
+        # add start vert to visited
+        visited.add(starting_vertex)
+        # if the start vert is equal to the target value
+        if starting_vertex == self.dfs_recursive(starting_vertex):
+            # return True
+            return True
+        # loop over every child vertex in vertices set at the start vertex
+        for child_vert in self.vertices[starting_vertex]:
+            # if child vert is not in visited
+            if child_vert not in visited:
+                # if the recursive call to dfs
+                if self.dfs(self, child_vert):
+                    # return True
+                    return True
+        # Return False
+        return False
+
+        
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
