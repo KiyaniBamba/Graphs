@@ -80,88 +80,94 @@ class Graph:
                 for next_vert in self.vertices[vertex]:
                     st.push(next_vert) 
 
-    def dft_recursive(self, starting_vertex):
-        """
-        Print each vertex in depth-first order
-        beginning from starting_vertex.
-
-        This should be done using recursion.
-        """
-        # create a stack
-        st = Stack()
-        # create list of visited nodes
-        visited = set()
-        # put starting node in the stack
-        st.push(starting_vertex)
-        # while queue not empty
-        while st.size() > 0:
-        # pop first node out of stack
-            vertex = st.pop()
-        # if not visited
-            if vertex not in visited:
-                visited.add(vertex)
-                print(vertex) 
-                for starting_vertex in self.vertices[vertex]:
-                    self.dfs_recursive(starting_vertex)
+    def dft_recursive(self, start_vert, visited=None):
+        # if the visited structure is set to None
+        if visited is None:
+            # create a new set for visited
+            visited = set()
+        # add a starting vertex to the visited set
+        visited.add(start_vert)
+        # print the start vertex
+        print(start_vert)
+        # loop over every child vertex in vertices set at the start vertex
+        for child_vert in self.vertices[start_vert]:
+            # if child vertex is not in visited
+            if child_vert not in visited:            
+                # do a recursive call to dft_recursive
+                # using the child vertex and the current visited set as arguments
+                self.dft_recursive(child_vert, visited)
             
 
-    def bfs(self, starting_vertex, destination_vertex):
-        """
-        Return a list containing the shortest path from
-        starting_vertex to destination_vertex in
-        breath-first order.
-        """
+    def bfs(self, starting_vertex_id, target_value):
         # create a queue to hold the vertex ids
         q = Queue()
         # enqueue the start vertex id
-        q.enqueue(starting_vertex)
+        q.enqueue(starting_vertex_id)
         # create an empty visited set
         visited = set()
         # while the queue is not empty
         while q.size() > 0:
             # set vert to the dequeued element
-            vert = q.dequeue()
+            vertex = q.dequeue()
             # if the vert is not in visited
-            if vert not in visited:
+            if vertex not in visited:
                 # if vert is target value
-                if vert == destination_vertex:
+                if vertex == target_value:
                     # return True
                     return True
                 # add the vert to visited set
-                visited.add(vert)
+                visited.add(vertex)
                 # loop over next vert in the vertices at the index of vert
-                for next_vert in self.vertices[vert]:
+                for next_vert in self.vertices[vertex]:
                     # enqueue the next vert
                     q.enqueue(next_vert)
         # return False
         return False
 
-    def dfs(self, starting_vertex, destination_vertex, visited=None):
+        def dfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        # if visited is None
-        if visited is None:
-            # create a new set of visited
-            visited = set()
-        # add start vert to visited
-        visited.add(starting_vertex)
-        # if the start vert is equal to the target value
-        if starting_vertex == destination_vertex:
-            # return True
-            return True
-        # loop over every child vertex in vertices set at the start vertex
-        for child_vert in self.vertices[starting_vertex]:
-            # if child vert is not in visited
-            if child_vert not in visited:
-                # if the recursive call to dfs
-                if self.dfs(child_vert, destination_vertex, visited):
-                    # return True
-                    return True
-        # Return False
-        return False
+        # create an empty stack and push the starting vertex ID
+        s = Stack()
+        s.push([starting_vertex])
+        # create a set to store the visited vertices
+        visited = set()
+        # while the stack is not empty
+        while s.size() > 0:
+            # pop the first vertex
+            path = s.pop()
+            v = path[-1]
+            # if that vertex has not been visited
+            if v not in visited:
+                # mark it as visited (printing for a representation)
+                if v == destination_vertex:
+                  return path
+                visited.add(v)
+                # then add all of it's neighbors to the top of the stack
+                for next_vertex in self.vertices[v]:
+                    new_path = list(path)
+                    new_path.append(next_vertex)
+                    s.push(new_path)
+
+    def dfs_recursive(self, starting_vertex, destination_vertex, visited=set(), path=[]):
+            if visited is None:
+                visited = set()
+            if path is None:
+                path = []
+            visited.add(starting_vertex)
+            path = path + [starting_vertex]
+            if starting_vertex == destination_vertex:
+                return path
+            for adj_vert in self.vertices[starting_vertex]:
+                if adj_vert not in visited:
+                    new_path = self.dfs_recursive(
+                        adj_vert, destination_vertex, visited, path)
+                    if new_path:
+                        return new_path
+            return None
 
     def dfs_recursive(self, starting_vertex):
         """
